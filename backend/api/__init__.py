@@ -8,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from api.v1 import router as v1_router
 from JobConnect.settings import STATIC_ROOT
-
 import time
 
 api_module_path = Path(__file__).parent
