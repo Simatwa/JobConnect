@@ -3,9 +3,12 @@ JobConnect API module. Uses FastAPI.
 """
 
 from fastapi import FastAPI, Request, Response
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from api.v1 import router as v1_router
+from JobConnect.settings import STATIC_ROOT
+
 import time
 
 api_module_path = Path(__file__).parent
@@ -42,5 +45,7 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+
+app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
 app.include_router(v1_router, prefix=api_prefix)

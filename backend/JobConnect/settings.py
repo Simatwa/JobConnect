@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
+    "adminlte3",
+    "adminlte3_theme",
     "users.apps.UsersConfig",
     "jobs.apps.JobsConfig",
     "django.contrib.admin",
@@ -119,9 +122,13 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+files_root = BASE_DIR / "files"
+
+STATIC_ROOT = files_root / "static"
+
 MEDIA_URL = "/media/"
 
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = files_root / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -129,3 +136,46 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.CustomUser"
+
+
+## JAZZMIN SETTINGS
+
+JAZZMIN_SETTINGS = {
+    "show_ui_builder": True,
+    "site_title": "JobConnect",
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "JobConnect",
+    "site_brand": "JobConnect",
+    # Logo to use for your site, must be present in static files, used for brand on top left
+    "site_logo": "default/site_logo.png",
+    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
+    # "login_logo": None,
+    # Logo to use for login form in dark themes (defaults to login_logo)
+    # "login_logo_dark": None,
+    # CSS classes that are applied to the logo above
+    "site_logo_classes": "img-circle",
+    # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
+    # "site_icon": None,
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to JobConnect",
+    # Copyright on the footer
+    "copyright": "JobConnect",
+    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
+    "user_avatar": "profile",
+    "topmenu_links": [
+        # Url that gets reversed (Permissions can be added)
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        # external url that opens in a new window (Permissions can be added)
+        {
+            "name": "Support",
+            "url": "https://github.com/Simatwa/JobConnect/issues",
+            "new_window": True,
+        },
+        # model admin to link to (Permissions checked against model)
+        {"model": "auth.User"},
+        # App with dropdown menu to all its models pages (Permissions checked against models)
+        {"app": "jobs"},
+    ],
+    "search_model": ["jobs.Job"],
+    "language_chooser": True,
+}

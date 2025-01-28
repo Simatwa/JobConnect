@@ -19,6 +19,11 @@ def generate_document_filepath(instance: "CustomUser", filename: str) -> str:
     return f"user_document/{instance.category}/{custom_filename}"
 
 
+def generate_profile_filepath(instance: "CustomUser", filename: str) -> str:
+    custom_filename = str(uuid4()) + path.splitext(filename)[1]
+    return f"user_profile/{instance.id}{custom_filename}"
+
+
 class CustomUser(AbstractUser):
     """Both indiduals and organizations"""
 
@@ -26,8 +31,8 @@ class CustomUser(AbstractUser):
         verbose_name=_("category"),
         help_text=_("Can either be an Individual or Organization"),
         choices=(
-            [_("Organization"), _(UserCategory.ORG)],
-            [_("Individual"), _(UserCategory.INDIVIDUAL)],
+            [_("Organization"), _(UserCategory.ORG.value)],
+            [_("Individual"), _(UserCategory.INDIVIDUAL.value)],
         ),
         null=False,
         max_length=30,
@@ -70,6 +75,15 @@ class CustomUser(AbstractUser):
         null=True,
     )
 
+    profile = models.ImageField(
+        _("Profile Picture"),
+        default="default/user_avatar.png",
+        upload_to=generate_profile_filepath,
+        validators=[FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png"])],
+        blank=True,
+        null=True,
+    )
+
     REQUIRED_FIELDS = [
         "category",
         "description",
@@ -89,3 +103,22 @@ class CustomUser(AbstractUser):
     ]
 
     search_fields = ["first_name", "last_name", "email", "phone_number", "location"]
+
+    def get_form_fields(self):
+        return [
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "password",
+            "category",
+            "description",
+            "location",
+            "phone_number",
+            "documents",
+        ]
+
+    class Meta:
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
+        abstract = False

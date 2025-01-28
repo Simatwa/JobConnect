@@ -23,6 +23,10 @@ class JobCategory(models.Model):
         _("date created"), auto_now_add=True, help_text=_("Time it firstly made entry")
     )
 
+    class Meta:
+        verbose_name = _("Job Category")
+        verbose_name_plural = _("Job Categories")
+
     def __str__(self):
         return self.name
 
@@ -37,10 +41,10 @@ class Job(models.Model):
         _("type"),
         help_text=_("Can either be Intership or Full-time"),
         choices=(
-            [_("Full-time"), JobTypes.FULL_TIME],
-            [_("Intership"), JobTypes.INTERNSHIP],
+            [_("Full-time"), JobTypes.FULL_TIME.value],
+            [_("Intership"), JobTypes.INTERNSHIP.value],
         ),
-        default=JobTypes.FULL_TIME,
+        default=JobTypes.FULL_TIME.value,
         max_length=30,
     )
     minimum_salary = models.PositiveIntegerField(
@@ -70,8 +74,8 @@ class Job(models.Model):
     )
 
     class Meta:
-        verbose_name = _("job")
-        verbose_name_plural = _("jobs")
+        verbose_name = _("Job")
+        verbose_name_plural = _("Jobs")
 
     def __str__(self):
-        return self.title + " - " + self.company
+        return self.title + " - " + self.company.username or self.company.first_name
