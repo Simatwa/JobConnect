@@ -45,8 +45,10 @@ def get_jobs_available(
     if offset and len(objects) > offset:
         objects = objects[:offset]
     jobs_found = []
-    for job in objects:
+    for count, job in enumerate(objects, start=1):
         jobs_found.append(form_job_details(job))
+        if count == limit:
+            break
 
     return JobsAvailable(total=len(objects), jobs=jobs_found)
 
