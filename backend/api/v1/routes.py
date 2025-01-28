@@ -1,10 +1,23 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, status, HTTPException
 from typing import Annotated
-from api.v1.models import JobsAvailable
+from api.v1.models import JobsAvailable, JobDetails, JobResponse
 from jobs.models import Job
 from typing import Literal
 
 router = APIRouter(prefix="/v1", tags=["v1"])
+
+
+def form_job_details(job: Job) -> JobResponse:
+    return JobResponse(
+        id=job.id,
+        company=job.company.__str__(),
+        category=job.category.name,
+        title=job.title,
+        type=job.type,
+        min_salary=job.minimum_salary,
+        max_salary=job.maximum_salary,
+        updated_at=job.updated_at,
+    )
 
 
 @router.get("/jobs", name="Job listings")
@@ -32,17 +45,26 @@ def get_jobs_available(
         objects = objects[:offset]
     jobs_found = []
     for job in objects:
-        jobs_found.append(
-            dict(
-                id=job.id,
-                company=job.company.__str__(),
-                category=job.category.name,
-                title=job.title,
-                type=job.type,
-                min_salary=job.minimum_salary,
-                max_salary=job.maximum_salary,
-                updated_at=job.updated_at,
-            )
-        )
+        jobs_found.append(form_job_details(job))
 
     return JobsAvailable(total=len(objects), jobs=jobs_found)
+
+
+@router.get("/job/{id}", name="Get job by ID")
+def get_job_by_id(
+    id: int,
+    all: Annotated[
+        bool, Query(description="Return all job details instead of just description")
+    ] = False,
+) -> JobDetails:
+    """Get job details by ID"""
+    target_job = Job.objects.filter(id=id).get()
+    if target_job:
+        if all:
+            return JobDetails(
+                details=form_job_details(target_job), description=target_job.description
+            )
+        else:
+            return JobDetails(description=target_job.description)
+    else:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, f"No job found with id {id}")
