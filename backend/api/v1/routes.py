@@ -35,12 +35,13 @@ def get_jobs_available(
     ] = 20,
 ) -> JobsAvailable:
     """Get jobs available"""
-    filter = []
+    filter = {}
     if type and type != "All":
-        filter.append(type__exact=type)
+        filter["type__exact"] = type
     if category:
-        filter.append(category_title__exact=category)
-    objects: list[Job] = Job.objects.filter(*filter).all()
+        filter["category__name__exact"] = category
+
+    objects: list[Job] = Job.objects.filter(**filter).all()
     if offset and len(objects) > offset:
         objects = objects[:offset]
     jobs_found = []
