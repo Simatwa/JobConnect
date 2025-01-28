@@ -5,8 +5,9 @@ from datetime import datetime
 
 class JobsAvailable(BaseModel):
     class Jobs(BaseModel):
+        id: int
         company: str
-        category: Optional[str] = None
+        category: str
         title: str
         type: Literal["Full-time", "Internship"]
         min_salary: int

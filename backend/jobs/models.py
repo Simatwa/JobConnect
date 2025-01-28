@@ -24,8 +24,8 @@ class JobCategory(models.Model):
     )
 
     class Meta:
-        verbose_name = _("Job Category")
-        verbose_name_plural = _("Job Categories")
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
 
     def __str__(self):
         return self.name
@@ -33,7 +33,9 @@ class JobCategory(models.Model):
 
 class Job(models.Model):
     company = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
-    category = models.ManyToManyField(JobCategory, verbose_name=_("Category"))
+    category = models.ForeignKey(
+        JobCategory, verbose_name=_("Category"), on_delete=models.CASCADE
+    )
     title = models.CharField(
         _("title"), help_text=_("Job title"), null=False, blank=False, max_length=100
     )

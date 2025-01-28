@@ -18,7 +18,7 @@ def get_jobs_available(
     ] = None,
     offset: Annotated[int, Query(description="Jobs available offset value")] = None,
     limit: Annotated[
-        int, Query(description="Number of jobs not to exceed", ge=5, le=100)
+        int, Query(description="Number of jobs not to exceed", ge=1, le=100)
     ] = 20,
 ) -> JobsAvailable:
     """Get jobs available"""
@@ -34,6 +34,7 @@ def get_jobs_available(
     for job in objects:
         jobs_found.append(
             dict(
+                id=job.id,
                 company=job.company.__str__(),
                 category=job.category.name,
                 title=job.title,
