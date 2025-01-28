@@ -10,8 +10,8 @@ from django.core.validators import FileExtensionValidator, RegexValidator
 
 
 class UserCategory(str, Enum):
-    ORG = "organization"
-    INDIVIDUAL = "individual"
+    ORG = "Organization"
+    INDIVIDUAL = "Individual"
 
 
 def generate_document_filepath(instance: "CustomUser", filename: str) -> str:
