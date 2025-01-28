@@ -41,8 +41,8 @@ class Job(models.Model):
         _("type"),
         help_text=_("Can either be Intership or Full-time"),
         choices=(
-            [_("Full-time"), JobTypes.FULL_TIME.value],
-            [_("Intership"), JobTypes.INTERNSHIP.value],
+            [JobTypes.FULL_TIME.value, JobTypes.FULL_TIME.value],
+            [JobTypes.INTERNSHIP.value, JobTypes.INTERNSHIP.value],
         ),
         default=JobTypes.FULL_TIME.value,
         max_length=30,

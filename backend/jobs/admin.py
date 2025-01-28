@@ -15,8 +15,9 @@ class JobCategoryAdmin(admin.ModelAdmin):
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
     list_display = [
+        "id",
         "company",
-        "category",
+        # "category",
         "title",
         "minimum_salary",
         "maximum_salary",
