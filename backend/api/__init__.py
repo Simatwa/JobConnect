@@ -19,7 +19,7 @@ app = FastAPI(
     version=api_module_path.joinpath("VERSION").read_text(),
     description=api_module_path.joinpath("README").read_text(),
     license_info={
-        "name": "MIT",
+        "name": "MIT License",
         "url": "https://raw.githubusercontent.com/Simatwa/JobConnect/refs/heads/main/LICENSE",
     },
     docs_url="/api/docs",
