@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query, status, HTTPException
 from typing import Annotated
-from api.v1.models import JobsAvailable, JobDetails, JobResponse
-from jobs.models import Job
+from api.v1.models import JobsAvailable, JobDetails, JobResponse, CategoriesAvailable
+from jobs.models import Job, JobCategory
 from typing import Literal
 
 router = APIRouter(prefix="/v1", tags=["v1"])
@@ -68,3 +68,28 @@ def get_job_by_id(
             return JobDetails(description=target_job.description)
     else:
         raise HTTPException(status.HTTP_404_NOT_FOUND, f"No job found with id {id}")
+
+
+@router.get("/categories")
+def get_categories_available(
+    limit: Annotated[
+        int, Query(description="Categories amount not to exceed", ge=1, le=100)
+    ] = 50
+) -> CategoriesAvailable:
+    """Explore categories available"""
+    categories = JobCategory.objects.all()
+
+    category_items = []
+
+    for count, category in enumerate(categories, start=1):
+        category_items.append(
+            dict(
+                id=category.id,
+                name=category.name,
+                description=category.description,
+                jobs_amount=Job.objects.filter(category=category).count(),
+            )
+        )
+        if count == limit:
+            break
+    return CategoriesAvailable(total=len(category_items), categories=category_items)

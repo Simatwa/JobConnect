@@ -19,6 +19,13 @@ class JobCategory(models.Model):
         blank=False,
     )
 
+    description = models.TextField(
+        _("description"),
+        help_text=_("All about the category"),
+        null=True,
+        blank=True,
+    )
+
     created_on = models.DateTimeField(
         _("date created"), auto_now_add=True, help_text=_("Time it firstly made entry")
     )

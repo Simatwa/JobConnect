@@ -23,3 +23,14 @@ class JobsAvailable(BaseModel):
 class JobDetails(BaseModel):
     details: Optional[JobResponse] = None
     description: str
+
+
+class CategoriesAvailable(BaseModel):
+    class Categories(BaseModel):
+        id: int
+        name: str
+        description: str
+        jobs_amount: int
+
+    total: int = Field(description="Categories amount")
+    categories: list[Categories]
