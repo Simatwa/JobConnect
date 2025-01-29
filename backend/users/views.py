@@ -22,6 +22,9 @@ class Login(View):
         return super().dispatch(*args, **kwargs)
 
     def get(self, request: HttpRequest):
+        if request.GET.get("next"):
+            # Reject redirects to prevent confusing API
+            return JsonResponse({"detail": "You have to login first."}, status=403)
         token = request.GET.get("token")
         return self.login_user(request, token)
 
