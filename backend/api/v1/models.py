@@ -1,6 +1,9 @@
-from pydantic import BaseModel, Field
-from typing import Literal, Optional
+from pydantic import BaseModel, Field, PositiveInt, field_validator
+from typing import Literal, Optional, TypeAlias
 from datetime import datetime
+from jobs.models import JobCategory, Job
+
+JobType: TypeAlias = Literal["Full-time", "Internship"]
 
 
 class JobResponse(BaseModel):
@@ -8,7 +11,7 @@ class JobResponse(BaseModel):
     company: str
     category: str
     title: str
-    type: Literal["Full-time", "Internship"]
+    type: JobType
     min_salary: int
     max_salary: int
     updated_at: datetime
@@ -128,3 +131,42 @@ class TokenAuth(BaseModel):
             }
         }
     }
+
+
+class Feedback(BaseModel):
+    detail: str = Field(description="Feedback in details")
+
+
+class NewJob(BaseModel):
+    category_id: int
+    title: str
+    type: JobType
+    maximum_salary: PositiveInt
+    minimum_salary: PositiveInt
+    description: str
+    is_available: bool = True
+
+    @field_validator("category_id")
+    def validate_category_id(value):
+        try:
+            JobCategory.objects.get(id=value)
+        except JobCategory.DoesNotExist:
+            raise ValueError("There is no job category with that id.")
+
+
+class UpdateJob(NewJob):
+    id: int
+    category_id: Optional[int] = None
+    title: Optional[str] = None
+    type: Optional[JobType] = None
+    maximum_salary: Optional[PositiveInt] = None
+    minimum_salary: Optional[PositiveInt] = None
+    description: Optional[str] = None
+    is_available: Optional[bool] = None
+
+    @field_validator("category_id")
+    def validate_category_id(value):
+        try:
+            Job.objects.get(id=value)
+        except JobCategory.DoesNotExist:
+            raise ValueError("There is no job with that id.")
