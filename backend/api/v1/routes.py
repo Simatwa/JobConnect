@@ -12,7 +12,7 @@ from api.v1.models import (
 )
 from jobs.models import Job, JobCategory
 from users.models import CustomUser
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import check_password
 from typing import Literal
 from api.v1.utils import form_job_details, generate_token, token_id
 import asyncio

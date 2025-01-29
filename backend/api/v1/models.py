@@ -150,6 +150,7 @@ class NewJob(BaseModel):
     def validate_category_id(value):
         try:
             JobCategory.objects.get(id=value)
+            return value
         except JobCategory.DoesNotExist:
             raise ValueError("There is no job category with that id.")
 
@@ -168,5 +169,6 @@ class UpdateJob(NewJob):
     def validate_category_id(value):
         try:
             Job.objects.get(id=value)
+            return value
         except JobCategory.DoesNotExist:
             raise ValueError("There is no job with that id.")
