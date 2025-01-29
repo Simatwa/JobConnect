@@ -2,6 +2,17 @@
 JobConnect API module. Uses FastAPI.
 """
 
+# Relevant for compatibility with CLI operations
+# that interacts with django database models
+
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "JobConnect.settings")
+import django
+
+django.setup()
+
+
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +20,7 @@ from pathlib import Path
 from api.v1 import router as v1_router
 from JobConnect.settings import STATIC_ROOT
 import time
+
 
 api_module_path = Path(__file__).parent
 
