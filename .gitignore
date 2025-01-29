@@ -176,3 +176,7 @@ vendor/
 migrations/
 user_document/
 user_profile/
+
+# frontend suffs
+
+node_modules/
