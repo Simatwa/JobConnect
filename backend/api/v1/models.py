@@ -109,3 +109,22 @@ class CategoriesAvailable(BaseModel):
             }
         }
     }
+
+
+class TokenAuth(BaseModel):
+    """
+    - `access_token` : Token value.
+    - `token_type` : bearer
+    """
+
+    access_token: str
+    token_type: Optional[str] = "bearer"
+
+    model_config = {
+        "json_schema_extras": {
+            "example": {
+                "access_token": "jbc_27b9d79erc245r44b9rba2crd2273b5cbb71",
+                "token_type": "bearer",
+            }
+        }
+    }

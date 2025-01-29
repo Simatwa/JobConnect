@@ -84,6 +84,15 @@ class CustomUser(AbstractUser):
         null=True,
     )
 
+    token = models.CharField(
+        _("token"),
+        help_text=_("Token for validation"),
+        null=True,
+        blank=True,
+        max_length=40,
+        unique=True,
+    )
+
     REQUIRED_FIELDS = [
         "category",
         "description",

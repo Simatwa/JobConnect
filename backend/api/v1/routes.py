@@ -1,23 +1,61 @@
-from fastapi import APIRouter, Query, status, HTTPException
+from fastapi import APIRouter, Query, status, HTTPException, Depends
+from fastapi.security.oauth2 import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Annotated
-from api.v1.models import JobsAvailable, JobDetails, JobResponse, CategoriesAvailable
+from api.v1.models import JobsAvailable, JobDetails, CategoriesAvailable, TokenAuth
 from jobs.models import Job, JobCategory
+from users.models import CustomUser
+from django.contrib.auth.hashers import check_password, make_password
 from typing import Literal
+from api.v1.utils import form_job_details, generate_token, token_id
 
 router = APIRouter(prefix="/v1", tags=["v1"])
 
+v1_auth_scheme = OAuth2PasswordBearer(
+    tokenUrl="/api/v1/token",
+    description="Generated API authentication token",
+)
 
-def form_job_details(job: Job) -> JobResponse:
-    return JobResponse(
-        id=job.id,
-        company=job.company.__str__(),
-        category=job.category.name,
-        title=job.title,
-        type=job.type,
-        min_salary=job.minimum_salary,
-        max_salary=job.maximum_salary,
-        updated_at=job.updated_at,
+
+def get_user(token: Annotated[str, Depends(v1_auth_scheme)]) -> CustomUser:
+    """Ensures token passed match the one set"""
+    if token:
+        try:
+            if token.startswith(token_id):
+                return CustomUser.objects.get(token=token)
+        except CustomUser.DoesNotExist:
+            pass
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid or missing token",
+        headers={"WWW-Authenticate": "Bearer"},
     )
+
+
+@router.post("/token")
+def fetch_token(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+) -> TokenAuth:
+    """
+    - `username` : User email.
+    - `password` : User password.
+    """
+    try:
+        user = CustomUser.objects.get(email=form_data.username)
+        if check_password(form_data.password, user.password):
+            if user.token is None:
+                user.token = generate_token()
+                user.save()
+            return TokenAuth(access_token=user.token, token_type="bearer")
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password."
+            )
+    except CustomUser.DoesNotExist:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User does not exist.",
+        )
 
 
 @router.get("/jobs", name="Job listings")
