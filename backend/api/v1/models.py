@@ -146,7 +146,7 @@ class NewJob(BaseModel):
     description: str
     is_available: bool = True
 
-    @field_validator("category_id")
+    #@field_validator("category_id")
     def validate_category_id(value):
         try:
             JobCategory.objects.get(id=value)
@@ -165,7 +165,7 @@ class UpdateJob(NewJob):
     description: Optional[str] = None
     is_available: Optional[bool] = None
 
-    @field_validator("category_id")
+    #@field_validator("category_id")
     def validate_category_id(value):
         try:
             Job.objects.get(id=value)
