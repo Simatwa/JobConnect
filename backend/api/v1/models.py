@@ -13,16 +13,69 @@ class JobResponse(BaseModel):
     max_salary: int
     updated_at: datetime
 
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "id": 1,
+                "company": "Tech Innovators Inc.",
+                "category": "Software Engineering",
+                "title": "Senior Software Engineer",
+                "type": "Full-time",
+                "min_salary": 90000,
+                "max_salary": 120000,
+                "updated_at": "2023-10-01T12:00:00Z",
+            }
+        }
+    }
+
 
 class JobsAvailable(BaseModel):
 
     total: int = Field(description="Total jobs available")
     jobs: list[JobResponse]
 
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "total": 1,
+                "jobs": [
+                    {
+                        "id": 1,
+                        "company": "Tech Innovators Inc.",
+                        "category": "Software Engineering",
+                        "title": "Senior Software Engineer",
+                        "type": "Full-time",
+                        "min_salary": 90000,
+                        "max_salary": 120000,
+                        "updated_at": "2023-10-01T12:00:00Z",
+                    }
+                ],
+            }
+        }
+    }
+
 
 class JobDetails(BaseModel):
     details: Optional[JobResponse] = None
     description: str
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "details": {
+                    "id": 1,
+                    "company": "Tech Innovators Inc.",
+                    "category": "Software Engineering",
+                    "title": "Senior Software Engineer",
+                    "type": "Full-time",
+                    "min_salary": 90000,
+                    "max_salary": 120000,
+                    "updated_at": "2023-10-01T12:00:00Z",
+                },
+                "description": "This is a detailed job description for the Senior Software Engineer position.",
+            }
+        }
+    }
 
 
 class CategoriesAvailable(BaseModel):
@@ -34,3 +87,25 @@ class CategoriesAvailable(BaseModel):
 
     total: int = Field(description="Categories amount")
     categories: list[Categories]
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "total": 2,
+                "categories": [
+                    {
+                        "id": 1,
+                        "name": "Software Engineering",
+                        "description": "Jobs related to software development and engineering.",
+                        "jobs_amount": 150,
+                    },
+                    {
+                        "id": 2,
+                        "name": "Data Science",
+                        "description": "Jobs related to data analysis and machine learning.",
+                        "jobs_amount": 80,
+                    },
+                ],
+            }
+        }
+    }
