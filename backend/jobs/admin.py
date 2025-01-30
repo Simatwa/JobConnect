@@ -1,4 +1,4 @@
-from django.contrib import admin # type: ignore
+from django.contrib import admin
 from jobs.models import JobCategory, Job
 
 # Register your models here.
@@ -18,16 +18,16 @@ class JobAdmin(admin.ModelAdmin):
         "company",
         "category",
         "title",
-        "minimum_salary",
-        "maximum_salary",
+        "min_salary",
+        "max_salary",
         "updated_at",
     ]
     search_fields = ["title"]
     list_filter = [
         "company",
         "category",
-        "minimum_salary",
-        "maximum_salary",
+        "min_salary",
+        "max_salary",
         "updated_at",
     ]
     ordering = ["-updated_at"]

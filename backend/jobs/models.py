@@ -41,7 +41,9 @@ class JobCategory(models.Model):
 class Job(models.Model):
     company = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
     category = models.ForeignKey(
-        JobCategory, verbose_name=_("Category"), on_delete=models.CASCADE
+        JobCategory,
+        verbose_name=_("Category"),
+        on_delete=models.CASCADE,
     )
     title = models.CharField(
         _("title"), help_text=_("Job title"), null=False, blank=False, max_length=100
@@ -56,14 +58,14 @@ class Job(models.Model):
         default=JobTypes.FULL_TIME.value,
         max_length=30,
     )
-    minimum_salary = models.PositiveIntegerField(
+    min_salary = models.PositiveIntegerField(
         _("minimum salary"),
         help_text=_("The least possible pay"),
         null=False,
         blank=False,
     )
 
-    maximum_salary = models.PositiveIntegerField(
+    max_salary = models.PositiveIntegerField(
         _("maximum salary"),
         help_text=_("The highest possible pay"),
         null=False,

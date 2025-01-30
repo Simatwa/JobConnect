@@ -11,4 +11,4 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_filter = ["category", "date_joined"]
     ordering = ["-date_joined"]
 
-    exclude = ["last_login", "date_joined"]
+    exclude = ["last_login", "date_joined", "token"]

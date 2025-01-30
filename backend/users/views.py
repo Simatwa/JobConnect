@@ -86,7 +86,9 @@ class DeleteUser(DeleteView):
             return JsonResponse(
                 {"detail": "You can only delete your own account"}, status=403
             )
-        return super().dispatch(*args, **kwargs)
+        else:
+            self.request.user.delete()
+            return JsonResponse({"detail": "Account deleted successfully."})
 
 
 class Success(TemplateView):
