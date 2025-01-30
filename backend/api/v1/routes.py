@@ -76,6 +76,13 @@ def fetch_token(
         )
 
 
+@router.patch("/token", name="Generate new token")
+def generate_new_token(user: Annotated[CustomUser, Depends(get_user)]) -> TokenAuth:
+    user.token = generate_token()
+    user.save()
+    return TokenAuth(access_token=user.token)
+
+
 @router.get("/jobs", name="Job listings")
 def get_jobs_available(
     type: Annotated[
@@ -268,7 +275,7 @@ def delete_existing_job(
         )
 
 
-@router.get("/compnay/{id}", name="Get company details")
+@router.get("/company/{id}", name="Get company details")
 def get_company_details(id: Annotated[int, Path(description="Company id")]):
     """Get details about a specific company"""
     try:
