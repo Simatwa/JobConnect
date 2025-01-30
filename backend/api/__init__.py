@@ -10,6 +10,8 @@ from api.v1 import router as v1_router
 from JobConnect.settings import STATIC_ROOT
 import time
 
+
+
 api_module_path = Path(__file__).parent
 
 api_prefix = "/api"
@@ -27,6 +29,16 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+
+
+
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
@@ -37,13 +49,7 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["GET", "POST"],
-    allow_headers=["*"],
-)
+
 
 app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
