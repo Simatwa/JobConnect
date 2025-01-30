@@ -17,8 +17,8 @@ fake:
 
 developmentsuperuser:
 	python manage.py createsuperuser --username developer \
-	 --email localhost@admin.com --category Individual \
-	  --description "Site admin" --location localhost \
+	 --email developer@localhost.domain --category Individual \
+	  --description "Site developer" --location localhost \
 	  --phone_number +254700000000 --noinput
 
 runserver:
