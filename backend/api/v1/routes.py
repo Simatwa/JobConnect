@@ -55,11 +55,11 @@ def fetch_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> TokenAuth:
     """
-    - `username` : User email.
+    - `username` : User username
     - `password` : User password.
     """
     try:
-        user = CustomUser.objects.get(email=form_data.username)
+        user = CustomUser.objects.get(username=form_data.username)
         if check_password(form_data.password, user.password):
             if user.token is None:
                 user.token = generate_token()
