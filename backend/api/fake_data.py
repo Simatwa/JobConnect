@@ -124,8 +124,8 @@ class FakeJob(FakeUtil):
                 category=random.choice(categories),
                 title=fake.sentence(),
                 type=random.choice(["Full-time", "Internship"]),
-                minimum_salary=random.randint(20000, 70000),
-                maximum_salary=random.randint(70001, 150000),
+                min_salary=random.randint(20000, 70000),
+                max_salary=random.randint(70001, 150000),
                 description=fake.paragraph(random.randint(1, 4)),
             ).save()
             print(f"> Jobs faked [{_+1}/{amount}]", end="\r")
