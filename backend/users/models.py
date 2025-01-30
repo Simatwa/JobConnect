@@ -10,8 +10,8 @@ from django.core.validators import FileExtensionValidator, RegexValidator
 
 
 class UserCategory(str, Enum):
-    ORG = "Organization"
-    INDIVIDUAL = "Individual"
+    ORG = _("Organization")
+    INDIVIDUAL = _("Individual")
 
 
 def generate_document_filepath(instance: "CustomUser", filename: str) -> str:
@@ -31,8 +31,8 @@ class CustomUser(AbstractUser):
         verbose_name=_("category"),
         help_text=_("Can either be an Individual or Organization"),
         choices=(
-            [_("Organization"), _(UserCategory.ORG.value)],
-            [_("Individual"), _(UserCategory.INDIVIDUAL.value)],
+            ["Organization", UserCategory.ORG.value],
+            ["Individual", UserCategory.INDIVIDUAL.value],
         ),
         null=False,
         max_length=30,
@@ -82,6 +82,15 @@ class CustomUser(AbstractUser):
         validators=[FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png"])],
         blank=True,
         null=True,
+    )
+
+    token = models.CharField(
+        _("token"),
+        help_text=_("Token for validation"),
+        null=True,
+        blank=True,
+        max_length=40,
+        unique=True,
     )
 
     REQUIRED_FIELDS = [

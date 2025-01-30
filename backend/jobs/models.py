@@ -19,6 +19,13 @@ class JobCategory(models.Model):
         blank=False,
     )
 
+    description = models.TextField(
+        _("description"),
+        help_text=_("All about the category"),
+        null=True,
+        blank=True,
+    )
+
     created_on = models.DateTimeField(
         _("date created"), auto_now_add=True, help_text=_("Time it firstly made entry")
     )
@@ -43,8 +50,8 @@ class Job(models.Model):
         _("type"),
         help_text=_("Can either be Intership or Full-time"),
         choices=(
-            [JobTypes.FULL_TIME.value, JobTypes.FULL_TIME.value],
-            [JobTypes.INTERNSHIP.value, JobTypes.INTERNSHIP.value],
+            ["Full-time", JobTypes.FULL_TIME.value],
+            ["Internship", JobTypes.INTERNSHIP.value],
         ),
         default=JobTypes.FULL_TIME.value,
         max_length=30,
@@ -63,6 +70,16 @@ class Job(models.Model):
         blank=False,
     )
 
+    description = models.TextField(
+        _("description"),
+        help_text=_("Job description in details"),
+        null=False,
+        blank=False,
+    )
+
+    is_available = models.BooleanField(
+        _("Is available"), help_text=_("Job availability status"), default=True
+    )
     updated_at = models.DateTimeField(
         verbose_name=_("Updated at"),
         help_text=_("Last time to be modified"),

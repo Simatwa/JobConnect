@@ -6,7 +6,7 @@ from jobs.models import JobCategory, Job
 
 @admin.register(JobCategory)
 class JobCategoryAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "created_on"]
+    list_display = ["name", "created_on"]
     search_fields = ["name"]
     list_filter = ["created_on"]
     ordering = ["-created_on"]
@@ -15,7 +15,6 @@ class JobCategoryAdmin(admin.ModelAdmin):
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
     list_display = [
-        "id",
         "company",
         "category",
         "title",

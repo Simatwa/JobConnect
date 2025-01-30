@@ -1,6 +1,2 @@
-# API Description
-
-This API forms main backend interface for the clients.
+This API forms the main backend interface for the clients.
 It handles literally all the non-admin requests right from job listings down to signup and login.
-
-The main idea is, let Django handles model manipulation as FastAPI deals with client.

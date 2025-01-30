@@ -2,6 +2,17 @@
 JobConnect API module. Uses FastAPI.
 """
 
+# Relevant for compatibility with CLI operations
+# that interacts with django database models
+
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "JobConnect.settings")
+import django
+
+django.setup()
+
+
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,7 +22,10 @@ from JobConnect.settings import STATIC_ROOT
 import time
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ed72b6b67674b771c8f4840a3186ff97d72b9a0d
 api_module_path = Path(__file__).parent
 
 api_prefix = "/api"
@@ -21,7 +35,7 @@ app = FastAPI(
     version=api_module_path.joinpath("VERSION").read_text(),
     description=api_module_path.joinpath("README").read_text(),
     license_info={
-        "name": "MIT",
+        "name": "MIT License",
         "url": "https://raw.githubusercontent.com/Simatwa/JobConnect/refs/heads/main/LICENSE",
     },
     docs_url="/api/docs",
@@ -49,7 +63,17 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
+<<<<<<< HEAD
 
+=======
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+>>>>>>> ed72b6b67674b771c8f4840a3186ff97d72b9a0d
 
 app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
