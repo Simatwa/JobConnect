@@ -179,4 +179,4 @@ user_profile/
 
 # frontend stuffs
 
-node_modules/
+frontend/node_modules
