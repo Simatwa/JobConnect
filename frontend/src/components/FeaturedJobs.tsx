@@ -76,9 +76,19 @@ export function FeaturedJobs() {
   );
 
   const featuredJobs = async () => {
-    const response = await axios.get(`http://localhost:8000/api/v1/jobs`);
-    const data = await response.data;
-    console.log(data);
+    try {
+      fetch("http://localhost:8000/api/v1/categories", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error("Error:", error));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
