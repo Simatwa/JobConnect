@@ -22,13 +22,11 @@ from JobConnect.settings import STATIC_ROOT
 import time
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ed72b6b67674b771c8f4840a3186ff97d72b9a0d
 api_module_path = Path(__file__).parent
 
 api_prefix = "/api"
+
+
 
 app = FastAPI(
     title="JobConnect API",
@@ -54,6 +52,8 @@ app.add_middleware(
 
 
 
+
+
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
     start_time = time.time()
@@ -63,9 +63,6 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
-<<<<<<< HEAD
-
-=======
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -73,7 +70,6 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
->>>>>>> ed72b6b67674b771c8f4840a3186ff97d72b9a0d
 
 app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
