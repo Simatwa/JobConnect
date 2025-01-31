@@ -16,6 +16,11 @@ python -m api fake all
 python manage.py createsuperuser
 ```
 
+> [!TIP]
+> Use make command to accomplish the same: `$ make`
+> Username : ```developer```
+> Password : ```development```
+
 ## Start Server
 
 ```shell

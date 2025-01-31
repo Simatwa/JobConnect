@@ -177,6 +177,6 @@ migrations/
 user_document/
 user_profile/
 
-# frontend suffs
+# frontend stuffs
 
-node_modules/
+frontend/node_modules

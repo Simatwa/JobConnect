@@ -58,6 +58,12 @@ class CreateUser(CreateView):
 
     success_url = reverse_lazy("users:success")
 
+    def form_valid(self, form: CustomUserCreationForm):
+        user: CustomUser = form.save(commit=False)
+        user.set_password(form.cleaned_data["password"])
+        user.save()
+        return JsonResponse({"detail": "User created successfully"})
+
 
 class UpdateUser(UpdateView):
     model = CustomUser
@@ -74,6 +80,13 @@ class UpdateUser(UpdateView):
             )
         return super().dispatch(*args, **kwargs)
 
+    def form_valid(self, form: CustomUserCreationForm):
+        user: CustomUser = form.save(commit=False)
+        if form.cleaned_data.get("password") is not None:
+            user.set_password(form.cleaned_data["password"])
+        user.save()
+        return JsonResponse({"detail": "User updated successfully"})
+
 
 class DeleteUser(DeleteView):
     model = CustomUser
@@ -86,7 +99,9 @@ class DeleteUser(DeleteView):
             return JsonResponse(
                 {"detail": "You can only delete your own account"}, status=403
             )
-        return super().dispatch(*args, **kwargs)
+        else:
+            self.request.user.delete()
+            return JsonResponse({"detail": "Account deleted successfully."})
 
 
 class Success(TemplateView):

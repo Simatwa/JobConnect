@@ -31,7 +31,7 @@ api_prefix = "/api"
 app = FastAPI(
     title="JobConnect API",
     version=api_module_path.joinpath("VERSION").read_text(),
-    description=api_module_path.joinpath("README").read_text(),
+    description=api_module_path.joinpath("README.md").read_text(),
     license_info={
         "name": "MIT License",
         "url": "https://raw.githubusercontent.com/Simatwa/JobConnect/refs/heads/main/LICENSE",
@@ -40,16 +40,6 @@ app = FastAPI(
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
 )
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["GET", "POST"],
-    allow_headers=["*"],
-)
-
-
 
 
 
@@ -63,6 +53,10 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
+<<<<<<< HEAD
+=======
+"""
+>>>>>>> e4ffeab6419556624eb64f21704a76bc7a177e8c
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -70,6 +64,12 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+<<<<<<< HEAD
+=======
+"""
+
+# Commented out temporarily for devlopment purposes
+>>>>>>> e4ffeab6419556624eb64f21704a76bc7a177e8c
 
 app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
