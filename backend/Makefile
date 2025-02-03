@@ -8,6 +8,7 @@ install:
 setup:
 	python manage.py makemigrations users jobs
 
+
 	python manage.py migrate
 
 	python manage.py collectstatic
