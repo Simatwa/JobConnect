@@ -27,7 +27,6 @@ api_module_path = Path(__file__).parent
 api_prefix = "/api"
 
 
-
 app = FastAPI(
     title="JobConnect API",
     version=api_module_path.joinpath("VERSION").read_text(),
@@ -42,8 +41,6 @@ app = FastAPI(
 )
 
 
-
-
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
     start_time = time.time()
@@ -53,23 +50,13 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
-<<<<<<< HEAD
-=======
-"""
->>>>>>> e4ffeab6419556624eb64f21704a76bc7a177e8c
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
-<<<<<<< HEAD
-=======
-"""
-
-# Commented out temporarily for devlopment purposes
->>>>>>> e4ffeab6419556624eb64f21704a76bc7a177e8c
 
 app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
