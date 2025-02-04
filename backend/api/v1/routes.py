@@ -288,3 +288,66 @@ def get_company_details(id: Annotated[int, Path(description="Company id")]):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"There is no company with id '{id}'",
         )
+
+
+@router.get("/user/details", name="Get details about current user")
+def get_user_details(user: Annotated[CustomUser, Depends(get_user)]) -> CompanyDetails:
+    """Get details about the current user"""
+    if user.profile is not None:
+        user.profile = static(user.profile)
+    return CompanyDetails(**jsonable_encoder(user))
+
+
+@router.post("/user/apply/{id}", name="Apply for a specific job")
+def apply_specific_job(
+    id: Annotated[int, Path(description="Job id")],
+    user: Annotated[CustomUser, Depends(get_user)],
+) -> Feedback:
+    """Apply for a job"""
+    try:
+        target_job = Job.objects.get(id=id)
+        user.jobs_applied.add(target_job)
+        user.save()
+        return Feedback(detail="Job applied successfully")
+    except Job.DoesNotExist:
+        raise HTTPException(status_code=404, detail=f"Theres is no job with id '{id}'")
+
+
+@router.delete("/user/apply/{id}", name="Unapply a speficic job")
+def apply_specific_job(
+    id: Annotated[int, Path(description="Job id")],
+    user: Annotated[CustomUser, Depends(get_user)],
+) -> Feedback:
+    """Apply for a job"""
+    try:
+        target_job = Job.objects.get(id=id)
+        user.jobs_applied.remove(target_job)
+        user.save()
+        return Feedback(detail="Job unapplied successfully")
+    except Job.DoesNotExist:
+        raise HTTPException(status_code=404, detail=f"There is no job with id '{id}'")
+
+
+@router.get("/user/applied", name="Get jobs applied")
+def get_jobs_applied(
+    user: Annotated[CustomUser, Depends(get_user)],
+    limit: Annotated[
+        int, Query(description="Number of jobs not to exceed", ge=1, le=100)
+    ] = 20,
+) -> JobsAvailable:
+    """Get jobs applied by the user"""
+    jobs_applied: list[Job] = user.jobs_applied.order_by("-updated_at").all()
+    total_jobs_applied = len(jobs_applied)
+    jobs_found = []
+    for count, job in enumerate(jobs_applied, start=1):
+        jobs_found.append(
+            JobResponse(
+                company_username=job.company.username,
+                category_name=job.category.name,
+                **jsonable_encoder(job),
+            )
+        )
+        if count == limit:
+            break
+
+    return JobsAvailable(total=total_jobs_applied, jobs=jobs_found)

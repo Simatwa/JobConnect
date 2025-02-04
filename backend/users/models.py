@@ -84,6 +84,12 @@ class CustomUser(AbstractUser):
         null=True,
     )
 
+    jobs_applied = models.ManyToManyField(
+        "jobs.Job",
+        verbose_name=_("Jobs Applied"),
+        help_text=_("Jobs that the user has applied for"),
+    )
+
     token = models.CharField(
         _("token"),
         help_text=_("Token for validation"),
