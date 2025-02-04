@@ -38,7 +38,9 @@ const FeaturedJobs = () => {
   const filteredJobs =
     selectedCategory === "all"
       ? jobs
-      : jobs.filter((job) => job.type.toLowerCase() === selectedCategory)
+      : jobs.filter((job) => job.type.toLowerCase() === selectedCategory);
+
+  // console.log(jobs.type)
 
   return (
     <section className="py-8 sm:py-16 bg-gray-50">
@@ -56,8 +58,8 @@ const FeaturedJobs = () => {
                 className={clsx(
                   "px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg font-medium transition-colors capitalize",
                   selectedCategory === category
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-600 hover:bg-gray-100'
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-600 hover:bg-gray-100"
                 )}
               >
                 {category.charAt(0).toUpperCase() +
@@ -68,7 +70,7 @@ const FeaturedJobs = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredJobs.length > 0 ? (
               filteredJobs?.map((job) => {
-                console.log(job.category_id);
+                // console.log(job.category_id);
 
                 return (
                   <div key={job.id} className="">
