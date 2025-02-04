@@ -37,14 +37,6 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
 )
 
-# CORS Middleware - Uncommented to allow requests from frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allow your frontend origin
-    allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
-)
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
@@ -54,7 +46,15 @@ async def add_process_time_header(request: Request, call_next):
     response.headers["X-Process-Time"] = str(process_time)
     return response
 
-# Mount static files
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
+    allow_headers=["*"],
+)
+
 app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
 # Include API router

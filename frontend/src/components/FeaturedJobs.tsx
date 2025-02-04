@@ -38,7 +38,7 @@ const FeaturedJobs = () => {
   const filteredJobs =
     selectedCategory === "all"
       ? jobs
-      : jobs.filter((job) => job.type.toLowerCase() === selectedCategory);
+      : jobs.filter((job) => job.type.toLowerCase() === selectedCategory)
 
   return (
     <section className="py-8 sm:py-16 bg-gray-50">
@@ -56,8 +56,8 @@ const FeaturedJobs = () => {
                 className={clsx(
                   "px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg font-medium transition-colors capitalize",
                   selectedCategory === category
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-600 hover:bg-gray-100"
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-100'
                 )}
               >
                 {category.charAt(0).toUpperCase() +
