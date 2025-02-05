@@ -88,6 +88,7 @@ class CustomUser(AbstractUser):
         "jobs.Job",
         verbose_name=_("Jobs Applied"),
         help_text=_("Jobs that the user has applied for"),
+        related_name="applicants",
     )
 
     token = models.CharField(

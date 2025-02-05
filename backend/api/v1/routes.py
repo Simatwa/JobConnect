@@ -13,12 +13,13 @@ from api.v1.models import (
     JobResponse,
     CategoryInfo,
     CompanyDetails,
+    CompleteCompanyDetails,
+    JobApplicants,
 )
 from api.v1.utils import generate_token, token_id, validate_category_id
 from jobs.models import Job, JobCategory
 from users.models import CustomUser
 from django.contrib.auth.hashers import check_password
-from django.templatetags.static import static
 import asyncio
 
 router = APIRouter(prefix="/v1", tags=["v1"])
@@ -278,13 +279,41 @@ def delete_existing_job(
         )
 
 
+@router.get("/job/appliers/{id}", name="Get users who applied a specific job")
+def get_job_appliers(
+    id: Annotated[int, Path(description="Job id")],
+    user: Annotated[CustomUser, Depends(get_user)],
+    offset: Annotated[int, Query(description="Offset value")] = 0,
+    limit: Annotated[
+        int, Query(description="Number of appliers not to exceed", ge=1, le=100)
+    ] = 20,
+) -> JobApplicants:
+    """Get users who applied for a specific job"""
+    try:
+        target_job = Job.objects.get(id=id)
+        if target_job.company.id != user.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You can only view appliers for jobs you posted.",
+            )
+        appliers: list[CustomUser] = target_job.applicants.all()
+        requested_appliers = appliers[offset : offset + limit]
+        return JobApplicants(
+            total=len(appliers),
+            applicants=[jsonable_encoder(applier) for applier in requested_appliers],
+        )
+    except Job.DoesNotExist:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Job with id '{id}' does not exist.",
+        )
+
+
 @router.get("/company/{id}", name="Get company details")
 def get_company_details(id: Annotated[int, Path(description="Company id")]):
     """Get details about a specific company"""
     try:
         user = CustomUser.objects.get(id=id)
-        if user.profile is not None:
-            user.profile = static(user.profile)
         return CompanyDetails(**jsonable_encoder(user))
     except CustomUser.DoesNotExist:
         raise HTTPException(
@@ -294,11 +323,11 @@ def get_company_details(id: Annotated[int, Path(description="Company id")]):
 
 
 @router.get("/user/details", name="Get details about current user")
-def get_user_details(user: Annotated[CustomUser, Depends(get_user)]) -> CompanyDetails:
+def get_user_details(
+    user: Annotated[CustomUser, Depends(get_user)]
+) -> CompleteCompanyDetails:
     """Get details about the current user"""
-    if user.profile is not None:
-        user.profile = static(user.profile)
-    return CompanyDetails(**jsonable_encoder(user))
+    return CompleteCompanyDetails(**jsonable_encoder(user))
 
 
 @router.post("/user/apply/{id}", name="Apply for a specific job")

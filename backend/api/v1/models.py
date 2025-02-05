@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, PositiveInt, EmailStr, field_validator
 from typing import Literal, Optional, TypeAlias
 from datetime import datetime
+from django.templatetags.static import static
 
 JobType: TypeAlias = Literal["Full-time", "Internship"]
 
@@ -36,7 +37,6 @@ class JobResponse(BaseModel):
 
 
 class JobsAvailable(BaseModel):
-
     total: int = Field(description="Total jobs available")
     jobs: list[JobResponse]
 
@@ -119,7 +119,6 @@ class CategoryInfo(BaseModel):
 
 
 class CategoriesAvailable(BaseModel):
-
     total: int = Field(description="Categories amount")
     categories: list[CategoryInfo]
 
@@ -253,3 +252,28 @@ class CompanyDetails(BaseModel):
             }
         }
     }
+
+    @field_validator("profile")
+    def validate_profile(value):
+        if bool(value):
+            return static(value)
+        else:
+            return None
+
+
+class CompleteCompanyDetails(CompanyDetails):
+    document: Optional[str] = Field(
+        description="Applicant resume or CV", alias="documents"
+    )
+
+    @field_validator("document")
+    def validate_document(value):
+        if bool(value):
+            return static(value)
+        else:
+            return None
+
+
+class JobApplicants(BaseModel):
+    total: int = Field(description="Job applicants amount")
+    applicants: list[CompleteCompanyDetails]
