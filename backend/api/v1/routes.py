@@ -13,7 +13,7 @@ from api.v1.models import (
     JobResponse,
     CategoryInfo,
     CompanyDetails,
-    CompleteCompanyDetails,
+    CompleteApplicantDetails,
     JobApplicants,
 )
 from api.v1.utils import generate_token, token_id, validate_category_id
@@ -325,9 +325,9 @@ def get_company_details(id: Annotated[int, Path(description="Company id")]):
 @router.get("/user/details", name="Get details about current user")
 def get_user_details(
     user: Annotated[CustomUser, Depends(get_user)]
-) -> CompleteCompanyDetails:
+) -> CompleteApplicantDetails:
     """Get details about the current user"""
-    return CompleteCompanyDetails(**jsonable_encoder(user))
+    return CompleteApplicantDetails(**jsonable_encoder(user))
 
 
 @router.post("/user/apply/{id}", name="Apply for a specific job")

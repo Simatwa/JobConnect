@@ -1,7 +1,9 @@
 from pydantic import BaseModel, Field, PositiveInt, EmailStr, field_validator
 from typing import Literal, Optional, TypeAlias
-from datetime import datetime
+from datetime import datetime, date
 from django.templatetags.static import static
+from django.conf import settings
+import os
 
 JobType: TypeAlias = Literal["Full-time", "Internship"]
 
@@ -261,7 +263,9 @@ class CompanyDetails(BaseModel):
             return None
 
 
-class CompleteCompanyDetails(CompanyDetails):
+class CompleteApplicantDetails(CompanyDetails):
+    gender: Literal["Male", "Female", "Other"]
+    dob: Optional[date] = Field(description="Date of birth")
     document: Optional[str] = Field(
         description="Applicant resume or CV", alias="documents"
     )
@@ -269,11 +273,11 @@ class CompleteCompanyDetails(CompanyDetails):
     @field_validator("document")
     def validate_document(value):
         if bool(value):
-            return static(value)
+            return os.path.join("/", settings.MEDIA_URL, value)
         else:
             return None
 
 
 class JobApplicants(BaseModel):
     total: int = Field(description="Job applicants amount")
-    applicants: list[CompleteCompanyDetails]
+    applicants: list[CompleteApplicantDetails]

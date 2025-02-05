@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, TemplateView, View
 from users.models import CustomUser
-from users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm, CustomUserUpdateForm
 from django.http import JsonResponse
 from django.http.request import HttpRequest
 from users.models import CustomUser
@@ -67,7 +67,7 @@ class CreateUser(CreateView):
 
 class UpdateUser(UpdateView):
     model = CustomUser
-    form_class = CustomUserCreationForm
+    form_class = CustomUserUpdateForm
     template_name = "user_creation.html"
 
     success_url = reverse_lazy("users:success")

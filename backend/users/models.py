@@ -14,6 +14,12 @@ class UserCategory(str, Enum):
     INDIVIDUAL = _("Individual")
 
 
+class Gender(str, Enum):
+    MALE = _("Male")
+    FEMALE = _("Female")
+    OTHER = _("Other")
+
+
 def generate_document_filepath(instance: "CustomUser", filename: str) -> str:
     custom_filename = str(uuid4()) + path.splitext(filename)[1]
     return f"user_document/{instance.category}/{custom_filename}"
@@ -26,6 +32,25 @@ def generate_profile_filepath(instance: "CustomUser", filename: str) -> str:
 
 class CustomUser(AbstractUser):
     """Both indiduals and organizations"""
+
+    dob = models.DateField(
+        verbose_name=_("Date of birth"),
+        help_text=_("Date of birth"),
+        null=True,
+        blank=True,
+    )
+
+    gender = models.CharField(
+        verbose_name=_("gender"),
+        max_length=10,
+        help_text=_("Can either be F/M/O"),
+        choices=(
+            ["Male", Gender.MALE.value],
+            ["Female", Gender.FEMALE.value],
+            ["Other", Gender.OTHER.value],
+        ),
+        default=Gender.OTHER.value,
+    )
 
     category = models.CharField(
         verbose_name=_("category"),
