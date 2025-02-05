@@ -48,7 +48,6 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
-<<<<<<< HEAD
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -57,9 +56,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-=======
 # Mount static files
->>>>>>> refs/remotes/origin/main
 app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
 # Include API router

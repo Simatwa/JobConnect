@@ -50,7 +50,7 @@ async def get_user(token: Annotated[str, Depends(v1_auth_scheme)]) -> CustomUser
     )
 
 
-@router.post("/token")
+@router.post("/token", name="User token")
 def fetch_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> TokenAuth:
@@ -159,7 +159,7 @@ def get_job_by_id(
         )
 
 
-@router.get("/categories")
+@router.get("/categories", name="Category listings")
 def get_categories_available(
     limit: Annotated[
         int, Query(description="Categories amount not to exceed", ge=1, le=100)
@@ -191,7 +191,10 @@ def get_category_info(
     """Specific category details"""
     try:
         category = JobCategory.objects.get(id=id)
-        return CategoryInfo(**jsonable_encoder(category))
+        return CategoryInfo(
+            jobs_amount=Job.objects.filter(category=category).count(),
+            **jsonable_encoder(category),
+        )
     except JobCategory.DoesNotExist:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -310,7 +313,7 @@ def apply_specific_job(
         user.save()
         return Feedback(detail="Job applied successfully")
     except Job.DoesNotExist:
-        raise HTTPException(status_code=404, detail=f"Theres is no job with id '{id}'")
+        raise HTTPException(status_code=404, detail=f"There is no job with id '{id}'")
 
 
 @router.delete("/user/apply/{id}", name="Unapply a speficic job")
