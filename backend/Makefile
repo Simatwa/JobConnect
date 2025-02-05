@@ -1,4 +1,4 @@
-.PHONY: install setup fake developmentsuperuser runserver default
+.PHONY: install setup fake test test-api-v1 developmentsuperuser runserver default
 
 default: install setup fake developmentsuperuser runserver
 
@@ -15,6 +15,11 @@ setup:
 
 fake:
 	python -m api fake all
+
+test: test-api-v1
+
+test-api-v1:
+	pytest api/tests/test_v1.py -xv
 
 developmentsuperuser:
 	python manage.py createsuperuser --username developer \
