@@ -13,3 +13,12 @@ export type Jobs = {
   };
 
   type JobCategory = "all" | "full-time" | "internship";
+
+
+ 
+  
+  interface JobType extends Jobs {
+    details: Jobs;
+    description: string;
+  };
+  

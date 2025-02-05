@@ -1,14 +1,14 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { Header } from './components/Header';
-import { Footer } from './components/Footer';
-import { Hero } from './components/Hero';
-import { JobDetails } from './pages/JobDetails';
-import { UserProfile } from './pages/UserProfile';
-import { Login } from './pages/Login';
-import { Register } from './pages/Register';
-import FeaturedJobs from './components/FeaturedJobs';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
+import { Hero } from "./components/Hero";
+import { JobDetails } from "./pages/JobDetails";
+import { UserProfile } from "./pages/UserProfile";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
+import FeaturedJobs from "./components/FeaturedJobs";
 
 function HomePage() {
   return (
