@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  MagnifyingGlassIcon,
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
-export function Header() {
+type Props = {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+};
+
+export function Header({ searchQuery, setSearchQuery }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  console.log(searchQuery);
 
   return (
     <header className="bg-white shadow-sm">
@@ -14,11 +25,13 @@ export function Header() {
               JobConnect
             </Link>
           </div>
-          
+
           <div className="hidden md:block flex-1 max-w-2xl mx-8">
             <div className="relative">
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search jobs..."
                 className="w-full pl-4 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -73,13 +86,22 @@ export function Header() {
               </div>
             </div>
             <div className="flex flex-col space-y-3">
-              <Link to="/jobs" className="text-gray-700 hover:text-blue-600 px-2 py-1">
+              <Link
+                to="/jobs"
+                className="text-gray-700 hover:text-blue-600 px-2 py-1"
+              >
                 Find Jobs
               </Link>
-              <Link to="/employers" className="text-gray-700 hover:text-blue-600 px-2 py-1">
+              <Link
+                to="/employers"
+                className="text-gray-700 hover:text-blue-600 px-2 py-1"
+              >
                 For Employers
               </Link>
-              <Link to="/login" className="text-gray-700 hover:text-blue-600 px-2 py-1">
+              <Link
+                to="/login"
+                className="text-gray-700 hover:text-blue-600 px-2 py-1"
+              >
                 Sign In
               </Link>
               <Link

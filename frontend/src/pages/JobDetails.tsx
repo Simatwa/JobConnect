@@ -35,13 +35,6 @@ export function JobDetails() {
     if (id) fetchjobDetailsDetails();
   }, [id]);
 
-  // useEffect(() => {
-  //   if (id && jobDetailss.length > 0) {
-  //     const jobDetails = jobDetailss.find((jobDetails) => jobDetails.id === parseInt(id));
-  //     setjobDetailsDetails(jobDetails || null);
-  //   }
-  // }, []);
-
   if (!jobDetails) {
     return (
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
