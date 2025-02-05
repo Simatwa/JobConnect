@@ -159,7 +159,7 @@ def get_job_by_id(
         )
 
 
-@router.get("/categories", name=["Category listings"])
+@router.get("/categories", name="Category listings")
 def get_categories_available(
     limit: Annotated[
         int, Query(description="Categories amount not to exceed", ge=1, le=100)
