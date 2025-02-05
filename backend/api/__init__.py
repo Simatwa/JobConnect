@@ -19,7 +19,7 @@ import django
 django.setup()
 
 from api.v1 import router as v1_router
-from JobConnect.settings import STATIC_ROOT
+from JobConnect.settings import STATIC_ROOT, FRONTED_DIR
 
 api_module_path = Path(__file__).parent
 api_prefix = "/api"
@@ -58,5 +58,15 @@ app.add_middleware(
 # Mount static files
 app.mount("/static", StaticFiles(directory=STATIC_ROOT))
 
+from django.core.handlers.wsgi import WSGIHandler
+
+from fastapi.middleware.wsgi import WSGIMiddleware
+
+app.mount("/d", app=WSGIMiddleware(WSGIHandler()), name="django")
+
 # Include API router
 app.include_router(v1_router, prefix=api_prefix)
+
+if FRONTED_DIR:
+    # let's serve the frontend dir
+    app.mount("/", StaticFiles(directory=FRONTED_DIR, html=True))

@@ -8,9 +8,9 @@ These endpoints are handled by Django
 
 | Index | Endpoint                                                      | Purpose          |
 |-------|---------------------------------------------------------------|------------------|
-|  0    | [`/admin`](/admin)                                            | Administration   |
-|  1    | [`/user/create`](/user/create)                                | Account Creation |
-|  2    | [`/user/login?token=<api-key>`](/user/login?token=<api-key)   | Account Login    |
-|  3    | [`/user/update/<id>`](/user/update/<id>)                      | Account Update   |
-|  4    | [`/user/delete/<id>`](/user/delete/<id>)                      | Account Deletion |
-|  5    | [`/user/logout`](/user/logout)                                | Account Logout   |
+|  0    | [`/d/admin`](/d/admin)                                            | Administration   |
+|  1    | [`/d/user/create`](/d/user/create)                                | Account Creation |
+|  2    | [`/d/user/login?token=<api-key>`](/d/user/login?token=<api-key)   | Account Login    |
+|  3    | [`/d/user/update/<id>`](/d/user/update/<id>)                      | Account Update   |
+|  4    | [`/d/user/delete/<id>`](/d/user/delete/<id>)                      | Account Deletion |
+|  5    | [`/d/user/logout`](/d/user/logout)                                | Account Logout   |
