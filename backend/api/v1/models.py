@@ -229,11 +229,11 @@ class UpdateJob(NewJob):
 class CompanyDetails(BaseModel):
     id: int
     username: str
-    first_name: str
+    first_name: Optional[str] = None
     last_name: Optional[str] = None
     email: EmailStr
-    phone_number: str
-    location: str
+    phone_number: Optional[str] = None
+    location: Optional[str] = None
     category: Literal["Organization", "Individual"]
     description: Optional[str] = None
     profile: Optional[str] = None
@@ -270,6 +270,26 @@ class CompleteApplicantDetails(CompanyDetails):
         description="Applicant resume or CV", alias="documents"
     )
 
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "id": 1,
+                "username": "john_doe",
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john.doe@example.com",
+                "phone_number": "123-456-7890",
+                "location": "123 Main St, Anytown, USA",
+                "category": "Individual",
+                "description": "Experienced software developer",
+                "profile": "/static/default/user_avatar.png",
+                "gender": "Male",
+                "dob": "1990-01-01",
+                "document": "/media/resumes/john_doe_resume.pdf",
+            }
+        }
+    }
+
     @field_validator("document")
     def validate_document(value):
         if bool(value):
@@ -281,3 +301,43 @@ class CompleteApplicantDetails(CompanyDetails):
 class JobApplicants(BaseModel):
     total: int = Field(description="Job applicants amount")
     applicants: list[CompleteApplicantDetails]
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "total": 2,
+                "applicants": [
+                    {
+                        "id": 1,
+                        "username": "john_doe",
+                        "first_name": "John",
+                        "last_name": "Doe",
+                        "email": "john.doe@example.com",
+                        "phone_number": "123-456-7890",
+                        "location": "123 Main St, Anytown, USA",
+                        "category": "Individual",
+                        "description": "Experienced software developer",
+                        "profile": "/static/default/user_avatar.png",
+                        "gender": "Male",
+                        "dob": "1990-01-01",
+                        "document": "/media/resumes/john_doe_resume.pdf",
+                    },
+                    {
+                        "id": 2,
+                        "username": "jane_smith",
+                        "first_name": "Jane",
+                        "last_name": "Smith",
+                        "email": "jane.smith@example.com",
+                        "phone_number": "987-654-3210",
+                        "location": "456 Elm St, Othertown, USA",
+                        "category": "Individual",
+                        "description": "Data scientist with 5 years of experience",
+                        "profile": "/static/default/user_avatar.png",
+                        "gender": "Female",
+                        "dob": "1985-05-15",
+                        "document": "/media/resumes/jane_smith_resume.pdf",
+                    },
+                ],
+            }
+        }
+    }
