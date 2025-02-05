@@ -24,8 +24,7 @@ test-api-v1:
 developmentsuperuser:
 	python manage.py createsuperuser --username developer \
 	 --email developer@localhost.domain --category Individual \
-	  --description "Site developer" --location localhost \
-	  --phone_number +254700000000 --noinput
+	 --location localhost --noinput
 
 runserver:
 	python -m api run

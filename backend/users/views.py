@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, TemplateView, View
 from users.models import CustomUser
-from users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm, CustomUserUpdateForm
 from django.http import JsonResponse
 from django.http.request import HttpRequest
 from users.models import CustomUser
@@ -58,16 +58,10 @@ class CreateUser(CreateView):
 
     success_url = reverse_lazy("users:success")
 
-    def form_valid(self, form: CustomUserCreationForm):
-        user: CustomUser = form.save(commit=False)
-        user.set_password(form.cleaned_data["password"])
-        user.save()
-        return JsonResponse({"detail": "User created successfully"})
-
 
 class UpdateUser(UpdateView):
     model = CustomUser
-    form_class = CustomUserCreationForm
+    form_class = CustomUserUpdateForm
     template_name = "user_creation.html"
 
     success_url = reverse_lazy("users:success")
@@ -79,13 +73,6 @@ class UpdateUser(UpdateView):
                 {"detail": "You can only update your own details"}, status=403
             )
         return super().dispatch(*args, **kwargs)
-
-    def form_valid(self, form: CustomUserCreationForm):
-        user: CustomUser = form.save(commit=False)
-        if form.cleaned_data.get("password") is not None:
-            user.set_password(form.cleaned_data["password"])
-        user.save()
-        return JsonResponse({"detail": "User updated successfully"})
 
 
 class DeleteUser(DeleteView):

@@ -39,11 +39,14 @@ class JobCategory(models.Model):
 
 
 class Job(models.Model):
-    company = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
+    company = models.ForeignKey(
+        "users.CustomUser", on_delete=models.CASCADE, related_name="jobs"
+    )
     category = models.ForeignKey(
         JobCategory,
         verbose_name=_("Category"),
         on_delete=models.CASCADE,
+        related_name="jobs",
     )
     title = models.CharField(
         _("title"), help_text=_("Job title"), null=False, blank=False, max_length=100

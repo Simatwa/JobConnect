@@ -14,6 +14,12 @@ class UserCategory(str, Enum):
     INDIVIDUAL = _("Individual")
 
 
+class Gender(str, Enum):
+    MALE = _("Male")
+    FEMALE = _("Female")
+    OTHER = _("Other")
+
+
 def generate_document_filepath(instance: "CustomUser", filename: str) -> str:
     custom_filename = str(uuid4()) + path.splitext(filename)[1]
     return f"user_document/{instance.category}/{custom_filename}"
@@ -26,6 +32,29 @@ def generate_profile_filepath(instance: "CustomUser", filename: str) -> str:
 
 class CustomUser(AbstractUser):
     """Both indiduals and organizations"""
+
+    email = models.EmailField(_("email address"), blank=False, null=False, unique=True)
+    password = models.CharField(_("password"), max_length=88)
+
+    dob = models.DateField(
+        verbose_name=_("Date of birth"),
+        help_text=_("Date of birth"),
+        null=True,
+        blank=True,
+    )
+
+    gender = models.CharField(
+        verbose_name=_("gender"),
+        max_length=10,
+        help_text=_("Can either be F/M/O"),
+        choices=(
+            ["Male", Gender.MALE.value],
+            ["Female", Gender.FEMALE.value],
+            ["Other", Gender.OTHER.value],
+        ),
+        blank=True,
+        default=Gender.OTHER.value,
+    )
 
     category = models.CharField(
         verbose_name=_("category"),
@@ -55,8 +84,8 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(
         verbose_name=_("phone number"),
         help_text=_("Active telephone number"),
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         max_length=15,
         validators=[
             RegexValidator(
@@ -88,6 +117,8 @@ class CustomUser(AbstractUser):
         "jobs.Job",
         verbose_name=_("Jobs Applied"),
         help_text=_("Jobs that the user has applied for"),
+        related_name="applicants",
+        blank=True,
     )
 
     token = models.CharField(
@@ -99,41 +130,14 @@ class CustomUser(AbstractUser):
         unique=True,
     )
 
-    REQUIRED_FIELDS = [
-        "category",
-        "description",
-        "phone_number",
-        "email",
-        "location",
-    ]
-
-    DISPLAY_FIELDS = [
-        "first_name",
-        "last_name",
-        "category",
-        "category",
-        "phone_number",
-        "location",
-        "date_joined",
-    ]
-
-    search_fields = ["first_name", "last_name", "email", "phone_number", "location"]
-
-    def get_form_fields(self):
-        return [
-            "first_name",
-            "last_name",
-            "username",
-            "email",
-            "password",
-            "category",
-            "description",
-            "location",
-            "phone_number",
-            "documents",
-        ]
+    REQUIRED_FIELDS = ["email", "category", "location"]
 
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
         abstract = False
+
+    def save(self, *args, **kwargs):
+        if len(self.password) != 88:
+            self.set_password(self.password)
+        super().save(*args, **kwargs)
