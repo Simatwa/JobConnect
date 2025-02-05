@@ -4,11 +4,12 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { Hero } from "./components/Hero";
-import { JobDetails } from "./pages/JobDetails";
+
 import { UserProfile } from "./pages/UserProfile";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import FeaturedJobs from "./components/FeaturedJobs";
+import { JobDetails } from "./pages/JobDetails";
 
 function HomePage() {
   return (
@@ -27,7 +28,7 @@ function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/jobs/:id" element={<JobDetails />} />
+            <Route path="/jobs/details/:id" element={<JobDetails />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

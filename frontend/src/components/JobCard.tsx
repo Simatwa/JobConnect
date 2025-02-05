@@ -43,7 +43,7 @@ const jobCard = ({ job }: Props) => {
           </div>
         </div>
         <Link
-          to={`/jobs/${job.id}`}
+          to={`/jobs/details/${job.id}`}
           className="mt-4 inline-flex items-center text-blue-600 hover:text-blue-700 text-sm sm:text-base"
         >
           View Details

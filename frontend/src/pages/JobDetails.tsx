@@ -7,49 +7,56 @@ import {
   BuildingOfficeIcon,
 } from "@heroicons/react/24/outline";
 import axios from "axios";
-import { Jobs, JobType } from "../../typings";
+import { JobType } from "../../typings";
 
 export function JobDetails() {
-  const [jobs, setJobs] = useState<JobType[]>([]);
-  const [jobDetails, setJobDetails] = useState<Jobs | null>(null);
+  const [jobDetails, setjobDetailsDetails] = useState<JobType | null>(null);
   const { id } = useParams();
-  console.log(id);
-  const fetchJobDetails = async () => {
-    const response = await axios.get(`http://localhost:8000/api/v1/job/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  // console.log(id);
+  const fetchjobDetailsDetails = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/v1/job/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    const data = await response.data;
-    setJobs(data);
-    console.log(data);
+      setjobDetailsDetails(response.data);
+      console.log(jobDetails);
+    } catch (error) {
+      setjobDetailsDetails(null);
+    }
   };
 
   useEffect(() => {
-    fetchJobDetails();
+    if (id) fetchjobDetailsDetails();
   }, [id]);
 
-  useEffect(() => {
-    if (id && jobs.length > 0) {
-      const job = jobs.find((job) => job.id === parseInt(id));
-      setJobDetails(job || null);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (id && jobDetailss.length > 0) {
+  //     const jobDetails = jobDetailss.find((jobDetails) => jobDetails.id === parseInt(id));
+  //     setjobDetailsDetails(jobDetails || null);
+  //   }
+  // }, []);
 
-  if (!job) {
+  if (!jobDetails) {
     return (
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900">Job Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Job Details Not Found
+          </h2>
           <p className="mt-2 text-gray-600">
-            The job you're looking for doesn't exist.
+            The job details you're looking for doesn't exist.
           </p>
           <Link
             to="/"
             className="mt-4 inline-block text-blue-600 hover:text-blue-700"
           >
-            View All Jobs
+            View All job
           </Link>
         </div>
       </div>
@@ -60,10 +67,12 @@ export function JobDetails() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="bg-white rounded-lg shadow-sm">
         <div className="p-6 border-b">
-          <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {jobDetails.details.title}
+          </h1>
           <div className="mt-2 flex items-center gap-2 text-gray-600">
             <BuildingOfficeIcon className="h-5 w-5" />
-            <span>{job.company_username}</span>
+            <span>{jobDetails.details.company_username}</span>
           </div>
         </div>
 
@@ -71,17 +80,18 @@ export function JobDetails() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="flex items-center gap-2 text-gray-600">
               <MapPinIcon className="h-5 w-5" />
-              <span>{job.location}</span>
+              <span>{jobDetails.details.location || "Not provided"}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <BriefcaseIcon className="h-5 w-5" />
-              <span>{job.type}</span>
+              <span>{jobDetails.details.type}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <CurrencyDollarIcon className="h-5 w-5" />
               <span>
                 {" "}
-                ${job.min_salary} - ${job.max_salary}
+                ${jobDetails.details.max_salary} - $
+                {jobDetails.details.min_salary}
               </span>
             </div>
           </div>
@@ -91,7 +101,9 @@ export function JobDetails() {
               Job Description
             </h2>
             <div className="whitespace-pre-wrap text-gray-600">
-              {job.description ? job.description : "No description provided"}
+              {jobDetails?.description
+                ? jobDetails?.description
+                : "No description provided"}
             </div>
           </div>
 

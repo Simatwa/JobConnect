@@ -1,3 +1,9 @@
+interface JobType  {
+  details: Jobs;
+  description: string;
+};
+
+
 export type Jobs = {
     id: number;
     title: string;
@@ -17,8 +23,5 @@ export type Jobs = {
 
  
   
-  interface JobType extends Jobs {
-    details: Jobs;
-    description: string;
-  };
+ 
   
