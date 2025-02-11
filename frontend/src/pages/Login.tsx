@@ -6,7 +6,7 @@ export function Login() {
   const navigate = useNavigate();
   const { signIn } = useAuth();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
   const [error, setError] = useState('');
@@ -18,10 +18,11 @@ export function Login() {
     setIsLoading(true);
 
     try {
-      await signIn(formData.email, formData.password);
+      await signIn(formData.username, formData.password);
       navigate('/');
     } catch (err) {
-      setError('Invalid email or password');
+      setError('Invalid username or password');
+      console.error('Login error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -49,17 +50,17 @@ export function Login() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                Username
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
+                id="username"
+                name="username"
+                type="text"
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               />
             </div>
 

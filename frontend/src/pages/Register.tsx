@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth, SignUpData } from '../contexts/AuthContext';
 
 export function Register() {
   const navigate = useNavigate();
   const { signUp } = useAuth();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+  const [formData, setFormData] = useState<SignUpData>({
+    username: '',
     password: '',
-    confirmPassword: '',
-    userType: 'jobseeker',
+    email: '',
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    location: '',
+    category: 'Individual',
+    description: '',
   });
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,7 +24,7 @@ export function Register() {
     e.preventDefault();
     setError('');
 
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
@@ -27,10 +32,11 @@ export function Register() {
     setIsLoading(true);
 
     try {
-      await signUp(formData.email, formData.password, formData.name, formData.userType);
+      await signUp(formData);
       navigate('/');
     } catch (err) {
       setError('Failed to create account');
+      console.error('Registration error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -58,27 +64,23 @@ export function Register() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Full name
+              <label className="block text-sm font-medium text-gray-700">
+                Username
               </label>
               <input
-                id="name"
-                name="name"
                 type="text"
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
               <input
-                id="email"
-                name="email"
                 type="email"
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -88,12 +90,88 @@ export function Register() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700">
+                First Name
+              </label>
+              <input
+                type="text"
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                value={formData.first_name}
+                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Last Name
+              </label>
+              <input
+                type="text"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                value={formData.last_name}
+                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                value={formData.phone_number}
+                onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Location
+              </label>
+              <input
+                type="text"
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Account Type
+              </label>
+              <select
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value as 'Organization' | 'Individual' })}
+              >
+                <option value="Individual">Individual</option>
+                <option value="Organization">Organization</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <textarea
+                rows={3}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input
-                id="password"
-                name="password"
                 type="password"
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -103,46 +181,16 @@ export function Register() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm password
+              <label className="block text-sm font-medium text-gray-700">
+                Confirm Password
               </label>
               <input
-                id="confirmPassword"
-                name="confirmPassword"
                 type="password"
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={formData.confirmPassword}
-                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">I am a</label>
-              <div className="mt-2 space-x-4">
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="jobseeker"
-                    checked={formData.userType === 'jobseeker'}
-                    onChange={(e) => setFormData({ ...formData, userType: e.target.value })}
-                    className="form-radio h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                  />
-                  <span className="ml-2">Job Seeker</span>
-                </label>
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="employer"
-                    checked={formData.userType === 'employer'}
-                    onChange={(e) => setFormData({ ...formData, userType: e.target.value })}
-                    className="form-radio h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                  />
-                  <span className="ml-2">Employer</span>
-                </label>
-              </div>
             </div>
           </div>
 
@@ -154,17 +202,6 @@ export function Register() {
             >
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>
-          </div>
-
-          <div className="text-sm text-center text-gray-600">
-            By creating an account, you agree to our{' '}
-            <Link to="/terms" className="text-blue-600 hover:text-blue-500">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link to="/privacy" className="text-blue-600 hover:text-blue-500">
-              Privacy Policy
-            </Link>
           </div>
         </form>
       </div>
