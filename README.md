@@ -57,6 +57,23 @@ make runserver
 > [!IMPORTANT]
 > The site is under active development, so it might be buggy.
 
+
+## Miscellaneous
+
+| Endpoint    |  URL          |
+|-------------|---------------|
+| API docs    | `/api/docs`   |
+| API Redocs  | `/api/redoc`  |
+| Admin       | `/d/admin`    |
+
+### Superuser credentials
+
+| Username    | Password    |
+|-------------|-------------|
+| development | developer   |
+
+
+
 ## Contributing
 
 We welcome contributions! Please fork the repository and create a pull request with your changes.
