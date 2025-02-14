@@ -19,7 +19,7 @@ import django
 django.setup()
 
 from api.v1 import router as v1_router
-from JobConnect.settings import STATIC_ROOT, FRONTED_DIR
+from JobConnect.settings import STATIC_ROOT, MEDIA_ROOT, FRONTED_DIR
 
 api_module_path = Path(__file__).parent
 api_prefix = "/api"
@@ -55,8 +55,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
-app.mount("/static", StaticFiles(directory=STATIC_ROOT))
+# Mount static & media files
+app.mount("/static", StaticFiles(directory=STATIC_ROOT), name="static")
+app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
 
 from django.core.handlers.wsgi import WSGIHandler
 
