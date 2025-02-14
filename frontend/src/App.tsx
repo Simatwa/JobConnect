@@ -6,6 +6,7 @@ import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
 import { FeaturedJobs } from './components/FeaturedJobs';
 import { JobDetails } from './pages/JobDetails';
+import { JobSearch } from './pages/JobSearch';
 import { UserProfile } from './pages/UserProfile';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
@@ -27,6 +28,7 @@ function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/jobs" element={<JobSearch />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/login" element={<Login />} />
@@ -39,4 +41,4 @@ function App() {
   );
 }
 
-export default App;
+export default App

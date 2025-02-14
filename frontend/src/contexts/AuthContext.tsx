@@ -42,7 +42,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { access_token } = await authApi.login(username, password);
       
       // Then use the token to login through Django
-      await axios.get(`http://localhost:8000/d/user/login?token=${access_token}`);
+      await axios.get(`http://localhost:8000/d/user/login`, {
+        params: { token: access_token }
+      });
       
       localStorage.setItem('token', access_token);
       setToken(access_token);

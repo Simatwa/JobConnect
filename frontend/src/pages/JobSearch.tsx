@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   MapPinIcon, 
@@ -7,17 +7,42 @@ import {
   BuildingOfficeIcon,
   FunnelIcon,
 } from '@heroicons/react/24/outline';
-
-const JOBS = [
-  // ... existing FEATURED_JOBS data plus more jobs
-];
+import { jobsApi } from '../lib/api';
 
 export function JobSearch() {
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [filters, setFilters] = useState({
-    location: '',
     type: '',
     category: '',
   });
+
+  useEffect(() => {
+    async function fetchJobs() {
+      try {
+        const data = await jobsApi.getJobs({
+          type: filters.type as any || undefined,
+        });
+        setJobs(data.jobs);
+      } catch (err) {
+        setError('Failed to load jobs');
+        console.error('Error fetching jobs:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchJobs();
+  }, [filters]);
+
+  if (loading) {
+    return <div className="text-center py-8">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-8 text-red-600">{error}</div>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -32,18 +57,6 @@ export function JobSearch() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Location
-                </label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border rounded-md"
-                  placeholder="City or Remote"
-                  value={filters.location}
-                  onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Job Type
                 </label>
                 <select
@@ -52,23 +65,8 @@ export function JobSearch() {
                   onChange={(e) => setFilters({ ...filters, type: e.target.value })}
                 >
                   <option value="">All Types</option>
-                  <option value="full-time">Full Time</option>
-                  <option value="internship">Internship</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Category
-                </label>
-                <select
-                  className="w-full px-3 py-2 border rounded-md"
-                  value={filters.category}
-                  onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                >
-                  <option value="">All Categories</option>
-                  <option value="engineering">Engineering</option>
-                  <option value="design">Design</option>
-                  <option value="marketing">Marketing</option>
+                  <option value="Full-time">Full Time</option>
+                  <option value="Internship">Internship</option>
                 </select>
               </div>
             </div>
@@ -78,14 +76,14 @@ export function JobSearch() {
         {/* Job Listings */}
         <div className="flex-1">
           <div className="space-y-4">
-            {JOBS.map((job) => (
+            {jobs.map((job) => (
               <div key={job.id} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">{job.title}</h3>
                     <div className="flex items-center gap-2 mt-2 text-gray-600">
                       <BuildingOfficeIcon className="h-5 w-5 flex-shrink-0" />
-                      <span className="truncate">{job.company}</span>
+                      <span className="truncate">{job.company_username}</span>
                     </div>
                   </div>
                   <Link
@@ -101,7 +99,7 @@ export function JobSearch() {
                 <div className="mt-4 flex flex-wrap gap-4">
                   <div className="flex items-center gap-2 text-gray-500">
                     <MapPinIcon className="h-5 w-5 flex-shrink-0" />
-                    <span>{job.location}</span>
+                    <span>{job.category_name}</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-500">
                     <BriefcaseIcon className="h-5 w-5 flex-shrink-0" />
@@ -109,7 +107,7 @@ export function JobSearch() {
                   </div>
                   <div className="flex items-center gap-2 text-gray-500">
                     <CurrencyDollarIcon className="h-5 w-5 flex-shrink-0" />
-                    <span>{job.salary}</span>
+                    <span>${job.min_salary.toLocaleString()} - ${job.max_salary.toLocaleString()}</span>
                   </div>
                 </div>
               </div>

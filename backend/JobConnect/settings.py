@@ -180,4 +180,4 @@ JAZZMIN_SETTINGS = {
 
 # DIRECTORY containing the index.html file.
 
-FRONTED_DIR = None
+FRONTED_DIR = "/home/smartwa/Downloads/zip/project/dist/"
