@@ -1,6 +1,12 @@
 # JobConnect
 Find your dream job or internship today.
 
+## Demo
+
+| Admin | Client |
+|-------|--------|
+| ![admin](assets/admin.png) | ![client](assets/client.png) |
+
 ## Technologies
 
 - [FastAPI](https://fastapi.tiangolo.com/)
