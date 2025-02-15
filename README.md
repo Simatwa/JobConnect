@@ -1,12 +1,6 @@
 # JobConnect
 Find your dream job or internship today.
 
-## Prerequisites
-
-- [x] [Python >= 3.12](https://python.org)
-- [x] [Node.js >= 18.19.0](https://nodejs.org/)
-- [x] [Git](https://gith)
-
 ## Technologies
 
 - [FastAPI](https://fastapi.tiangolo.com/)
@@ -14,6 +8,12 @@ Find your dream job or internship today.
 - [Vite](https://vitejs.dev/)
 
 ## Installation & Setup
+
+### Prerequisites
+
+- [x] [Python >= 3.12](https://python.org)
+- [x] [Node.js >= 18.19.0](https://nodejs.org/)
+- [x] [Git](https://gith)
 
 > [!NOTE]
 > These instructions presume you're using a *nix system.
@@ -54,7 +54,7 @@ cd ../backend
 make runserver
 ```
 
-> [!IMPORTANT]
+> [!WARNING]
 > The site is under active development, so it might be buggy.
 
 
